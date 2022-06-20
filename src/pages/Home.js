@@ -21,12 +21,43 @@ class Home extends Component {
     // dealing with a larger data sensitive project.
     todo.id = Math.random();
     // Create a array that contains the current array and the new todo item
-    let new_list = [...this.state.todos, todo];
+    let new_list = [];
+    //let contentArr =  Object.values(this.state.todos)
+    let exists = false;
+    //contentArr.find(content => content === todo)
+    this.state.todos.forEach(todo_list => 
+      {
+        for(let key in todo_list)
+        {
+          if(todo_list[key] == todo.content)
+          {
+            exists = true;
+          }
+        }
+    })
+
+    if(exists){
+      new_list = [...this.state.todos];
+    }
+    else{
+      new_list = [...this.state.todos, todo];
+    }
     // Update the local state with the new array.
     this.setState({
       todos: new_list,
     });
   };
+
+  deleteTodo = (id) => {
+    const todos = this.state.todos.filter((todo) => {
+      return todo.id !== id;
+    });
+    this.setState({
+      todos: todos,
+    });
+  };
+
+
   render() {
     return (
       <div className="Home">
@@ -36,7 +67,7 @@ class Home extends Component {
         <AddTodo addTodo={this.addTodo} />
         {/* When returning the Todos component, todos is a prop passed to the todos.js file
          to format and render the current todo list state */}
-        <Todos todos={this.state.todos} />
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
       </div>
     );
   }
